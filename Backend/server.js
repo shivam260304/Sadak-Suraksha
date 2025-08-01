@@ -3,6 +3,8 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/auth');
+const reportRoutes = require('./routes/report');
+const myReportRoutes = require('./routes/myreport');
 
 dotenv.config();
 
@@ -13,6 +15,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
+app.use('/api/report', reportRoutes);
+app.use('/api/myReport', myReportRoutes);
 
 app.get("/", (req, res) => {
   res.send("Sadak Surakhsha Backend is running!");
