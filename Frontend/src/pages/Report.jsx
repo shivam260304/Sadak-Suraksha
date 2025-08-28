@@ -14,18 +14,34 @@ const Report = () => {
     e.preventDefault();
 
     try {
-      // For now, skipping image upload (not wired in backend yet)
       const reportData = {
         title,
         description,
         location,
         category,
         priority,
-        imageUrl: image ? image.name : "", // You'd need to handle actual image upload for real app
+        imageUrl: image ? image.name : "",
       };
 
-      const res = await axios.post("http://localhost:5000/api/report", reportData);
+      // Get token from localStorage (make sure your login process stores it here)
+      const token = localStorage.getItem("token"); // Adjust storage if you use cookies/session
+
+      if (!token) {
+        setMessage("You must be logged in to submit a report.");
+        return;
+      }
+
+      const res = await axios.post(
+        "http://localhost:5000/api/report",
+        reportData,
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          }
+        }
+      );
       setMessage(res.data.message);
+
       // Reset form
       setTitle("");
       setDescription("");
@@ -48,7 +64,6 @@ const Report = () => {
           </div>
         )}
         <form onSubmit={handleSubmit}>
-          {/* ...rest of your form fields, as before... */}
           <label className="block mb-2 font-medium">Title</label>
           <input
             type="text" required value={title}
@@ -99,7 +114,7 @@ const Report = () => {
             <option value="Medium">🟠 Medium – Disruptive but manageable</option>
             <option value="Low">🟢 Low – Minor inconvenience</option>
           </select>
-                
+              
           <label className="block mb-2 font-medium">Photo (optional)</label>
           <div className="mb-4">
             <input
