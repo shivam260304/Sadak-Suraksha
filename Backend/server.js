@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const authRoutes = require('./routes/auth');
 const reportRoutes = require('./routes/report');
 const myReportRoutes = require('./routes/myreport');
+const chatbotRoutes = require('./routes/chatbotRoutes');
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/report', reportRoutes);
 app.use('/api/myReport', myReportRoutes);
+app.use('/api/chatbot', chatbotRoutes);
 
 app.get("/", (req, res) => {
   res.send("Sadak Surakhsha Backend is running!");

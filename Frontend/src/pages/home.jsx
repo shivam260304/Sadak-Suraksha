@@ -1,8 +1,11 @@
 // src/pages/Home.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import ChatPopup from '../components/ChatPopup';
 
 const Home = () => {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-blue-50 text-gray-800 px-4 py-10">
       {/* Hero Section */}
@@ -46,6 +49,21 @@ const Home = () => {
       <footer className="mt-16 text-center text-sm text-gray-500">
         🇮🇳 Made with care for Indian roads by Team Sadak Suraksha
       </footer>
+
+      {/* Chat Icon Button - Fixed position */}
+      <button
+        onClick={() => setIsChatOpen(true)}
+        className="fixed left-5 bottom-5 w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center z-40 transition-all duration-300 hover:scale-110"
+        aria-label="Open chat support"
+      >
+        💬
+      </button>
+
+      {/* Chat Popup Component */}
+      <ChatPopup 
+        isOpen={isChatOpen} 
+        onClose={() => setIsChatOpen(false)} 
+      />
     </div>
   );
 };
