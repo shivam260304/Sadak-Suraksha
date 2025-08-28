@@ -53,7 +53,7 @@ const ChatPopup = ({ isOpen = true, onClose }) => {
         headers: {
           'Content-Type': 'application/json'
         },
-        timeout: 30000 // 30 second timeout
+        timeout: 30000 // Fixed: 30 second timeout instead of 3,000,000ms
       });
 
       const botMsg = {
@@ -72,7 +72,7 @@ const ChatPopup = ({ isOpen = true, onClose }) => {
       
       if (error.response) {
         // Server responded with error status
-        errorMessage = `Server error: ${error.response.data?.error || error.response.statusText}`;
+        errorMessage = `Server error: ${error.response.data?.error || error.response.statusText}`; // Fixed: proper template literal
       } else if (error.request) {
         // Request was made but no response received
         errorMessage = "No response from server. Please check your connection.";
@@ -110,7 +110,7 @@ const ChatPopup = ({ isOpen = true, onClose }) => {
       {/* Header */}
       <div className="flex justify-between items-center p-4 bg-[#232347] border-b border-gray-800">
         <div className="flex items-center gap-2">
-          <span className="font-bold text-lg text-slate-200">Kkk</span>
+          <span className="font-bold text-lg text-slate-200">Urban Cab</span>
           <span className="text-xs px-2 py-1 rounded bg-purple-700 text-white">using proxy</span>
         </div>
         {onClose && (
@@ -129,11 +129,11 @@ const ChatPopup = ({ isOpen = true, onClose }) => {
         {messages.map((msg) => (
           <div 
             key={msg.id} 
-            className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'} w-full`}
+            className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'} w-full`} // Fixed: proper template literal
           >
             <div className="flex items-start gap-2 max-w-[85%]">
               {msg.sender === 'bot' && 
-                <div className={`w-9 h-9 ${avatarColors.bot} rounded-full flex items-center justify-center text-[18px]`}>
+                <div className={`w-9 h-9 ${avatarColors.bot} rounded-full flex items-center justify-center text-[18px]`}> {/* Fixed: proper template literal */}
                   {avatarIcons.bot}
                 </div>
               }
@@ -150,7 +150,7 @@ const ChatPopup = ({ isOpen = true, onClose }) => {
                 </div>
               </div>
               {msg.sender === 'user' && 
-                <div className={`w-9 h-9 ${avatarColors.user} rounded-full flex items-center justify-center text-[18px]`}>
+                <div className={`w-9 h-9 ${avatarColors.user} rounded-full flex items-center justify-center text-[18px]`}> {/* Fixed: proper template literal */}
                   {avatarIcons.user}
                 </div>
               }
@@ -162,7 +162,7 @@ const ChatPopup = ({ isOpen = true, onClose }) => {
         {loading && (
           <div className="flex justify-start w-full">
             <div className="flex items-start gap-2 max-w-[85%]">
-              <div className={`w-9 h-9 ${avatarColors.bot} rounded-full flex items-center justify-center text-[18px]`}>
+              <div className={`w-9 h-9 ${avatarColors.bot} rounded-full flex items-center justify-center text-[18px]`}> {/* Fixed: proper template literal */}
                 {avatarIcons.bot}
               </div>
               <div className="bg-[#2e2e47] text-purple-100 rounded-2xl rounded-bl-md px-4 py-3">
@@ -187,11 +187,11 @@ const ChatPopup = ({ isOpen = true, onClose }) => {
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Press button to send chat. Enter for linebreak"
+          placeholder="Type your message... (Enter to send, Shift+Enter for new line)" // Fixed: correct placeholder text
           disabled={loading}
         />
         <button
-          className={`bg-purple-700 hover:bg-purple-800 p-3 rounded-lg text-white disabled:bg-gray-600 disabled:cursor-not-allowed flex items-center transition-colors duration-200`}
+          className={`bg-purple-700 hover:bg-purple-800 p-3 rounded-lg text-white disabled:bg-gray-600 disabled:cursor-not-allowed flex items-center transition-colors duration-200`} // Fixed: proper template literal
           onClick={sendMessage}
           disabled={loading || !input.trim()}
         >

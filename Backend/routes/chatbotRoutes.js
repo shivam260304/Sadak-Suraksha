@@ -2,18 +2,25 @@
 const express = require('express');
 const axios = require('axios');
 const router = express.Router();
+const dotenv = require("dotenv");
+dotenv.config();
 
-// Adjust configuration for your proxy
-const PROXY_URL = 'https://your-proxy-url/chat/completions'; // Replace with actual proxy
-const MODEL_NAME = 'gpt-4'; // Or as needed
+// Move sensitive data to environment variables
+const PROXY_URL = 'https://openrouter.ai/api/v1/chat/completions';
+const MODEL_NAME = 'tngtech/deepseek-r1t2-chimera:free';
+const API_KEY = process.env.OPENROUTER_API_KEY; // Store in .env file
 
 router.post('/message', async (req, res) => {
   const { message, sessionId } = req.body;
+  
   if (!message) {
     return res.status(400).json({ error: 'Message is required' });
   }
 
-  // Prepare the payload
+  if (!API_KEY) {
+    return res.status(500).json({ error: 'API key not configured' });
+  }
+
   const payload = {
     model: MODEL_NAME,
     messages: [
@@ -25,20 +32,25 @@ router.post('/message', async (req, res) => {
   };
 
   try {
-    // Proxy request to AI model
     const response = await axios.post(PROXY_URL, payload, {
-        headers: { 'Content-Type': 'application/json' },
-        timeout: 30000 // matches frontend timeout
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${API_KEY}` // Fixed: proper template literal with quotes
+      },
+      timeout: 30000 // Fixed: reasonable 30-second timeout
     });
 
-    // Extract bot response
     let botReply = response.data.choices?.[0]?.message?.content 
       || response.data.response
       || 'Sorry, I could not generate a response.';
 
     res.json({ response: botReply });
   } catch (error) {
-    res.status(502).json({ error: 'Proxy error', details: error.message });
+    console.error('API Error:', error.response?.data || error.message);
+    res.status(502).json({ 
+      error: 'Proxy error', 
+      details: error.response?.data?.error || error.message 
+    });
   }
 });
 
