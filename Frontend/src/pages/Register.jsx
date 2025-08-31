@@ -9,11 +9,50 @@ const Register = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  const blockedEmailDomains = [
+    "tempmail.com",
+    "10minutemail.com",
+    "disposablemail.com",
+    // Add more disposable domains here as needed
+  ];
+
+  const validateEmail = (email) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) return false;
+    const domain = email.split("@")[1].toLowerCase();
+    return !blockedEmailDomains.includes(domain);
+  };
+
+  const validateUsername = (username) => {
+    // Allow letters and spaces only, 3-30 characters, at least 2 letters
+    const alphabetCount = (username.match(/[a-zA-Z]/g) || []).length;
+    const pattern = /^[a-zA-Z ]{3,30}$/;
+    return pattern.test(username) && alphabetCount >= 2;
+  };
+
+  const validatePassword = (password) => {
+    // Minimum 6 chars, at least 1 uppercase, 1 lowercase, 1 special char
+    const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{6,}$/;
+    return pattern.test(password);
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
-    if (!email || !username || password.length < 6)
-      return setError("All fields required. Password must be at least 6 chars.");
+
+    if (!email || !username || !password) {
+      return setError("All fields are required.");
+    }
+
+    if (!validateEmail(email)) return setError("Please enter a valid, non-disposable email.");
+    if (!validateUsername(username))
+      return setError(
+        "Username must be 3-30 letters/spaces with at least 2 letters, no numbers or special chars."
+      );
+    if (!validatePassword(password))
+      return setError(
+        "Password must be at least 6 characters, contain uppercase, lowercase, and special character."
+      );
 
     try {
       const res = await fetch("http://localhost:5000/api/auth/register", {
@@ -33,9 +72,7 @@ const Register = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-blue-50 px-4">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-sm">
-        <h2 className="text-2xl font-bold text-blue-700 mb-6 text-center">
-          Register
-        </h2>
+        <h2 className="text-2xl font-bold text-blue-700 mb-6 text-center">Register</h2>
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
         <form onSubmit={handleRegister}>
           <input

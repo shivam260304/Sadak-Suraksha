@@ -1,29 +1,49 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/home";
+import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Report from "./pages/Report";
 import MyReports from "./pages/MyReports";
+import { AuthProvider } from "./components/AuthContext";
 
-
-
+const AdminHome = () => (
+  <div className="min-h-screen flex flex-col items-center justify-center p-6">
+    <h1 className="text-3xl font-bold mb-4">Admin Home Page (Coming Soon)</h1>
+  </div>
+);
+const Complaints = () => (
+  <div className="min-h-screen flex flex-col items-center justify-center p-6">
+    <h1 className="text-3xl font-bold mb-4">Complaints Page (Coming Soon)</h1>
+  </div>
+);
+const SolvesComplaints = () => (
+  <div className="min-h-screen flex flex-col items-center justify-center p-6">
+    <h1 className="text-3xl font-bold mb-4">Solves Complaints Page (Coming Soon)</h1>
+  </div>
+);
 
 function App() {
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/report" element={<Report />} /> {/* ✅ Add this */}
-        <Route path="/my-reports" element={<MyReports />} />
+    <AuthProvider>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
 
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
-        {/* Add more routes here later */}
-      </Routes>
-    </Router>
+          <Route path="/report" element={<Report />} />
+          <Route path="/my-reports" element={<MyReports />} />
+
+          {/* Admin routes */}
+          <Route path="/admin-home" element={<AdminHome />} />
+          <Route path="/complaints" element={<Complaints />} />
+          <Route path="/solves-complaints" element={<SolvesComplaints />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 

@@ -1,69 +1,60 @@
-// src/pages/Home.jsx
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import ChatPopup from '../components/ChatPopup';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import ChatPopup from "../components/ChatPopup";
 
 const Home = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-blue-50 text-gray-800 px-4 py-10">
+    <div className="min-h-screen bg-gradient-to-b from-white to-blue-50 text-gray-800 px-6 py-16 sm:px-12 md:px-20 lg:px-32">
       {/* Hero Section */}
-      <section className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-blue-800">
+      <section className="text-center mb-16 max-w-4xl mx-auto">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-blue-800 leading-tight">
           🚧 Sadak Suraksha
         </h1>
-        <p className="mt-4 text-lg text-gray-700 max-w-2xl mx-auto">
+        <p className="mt-6 text-lg sm:text-xl text-gray-700 max-w-3xl mx-auto">
           A crowdsourced platform for citizens to report potholes and road hazards in real-time.
         </p>
-        <Link to="/report">
-          <button className="mt-6 px-6 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded shadow">
+        <Link to="/report" aria-label="Report a hazard">
+          <button className="mt-8 px-8 py-3 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white rounded-lg shadow-lg transition transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-orange-300">
             Report a Hazard
           </button>
         </Link>
       </section>
 
-      {/* Features */}
-      <section className="grid md:grid-cols-3 gap-6 text-left max-w-5xl mx-auto">
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-bold text-blue-700">🛣️ Report Hazards</h2>
-          <p className="mt-2 text-gray-600">
+      {/* Features Section */}
+      <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-8 max-w-6xl mx-auto text-left">
+        <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+          <h2 className="text-2xl font-semibold text-blue-700 mb-3">🛣️ Report Hazards</h2>
+          <p className="text-gray-600 leading-relaxed">
             Quickly log road issues with description, severity, and location.
           </p>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-bold text-blue-700">📍 Live Location Tracking</h2>
-          <p className="mt-2 text-gray-600">
-            View and submit location-based reports using the integrated map.
-          </p>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-bold text-blue-700">🚀 Real-Time Updates</h2>
-          <p className="mt-2 text-gray-600">
+
+        <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+          <h2 className="text-2xl font-semibold text-blue-700 mb-3">🚀 Real-Time Updates</h2>
+          <p className="text-gray-600 leading-relaxed">
             Authorities and users get instant updates on newly reported issues.
           </p>
         </div>
       </section>
 
-      {/* Footer Note */}
-      <footer className="mt-16 text-center text-sm text-gray-500">
+      {/* Footer */}
+      <footer className="mt-20 text-center text-sm text-gray-500 select-none">
         🇮🇳 Made with care for Indian roads by Team Sadak Suraksha
       </footer>
 
       {/* Chat Icon Button - Fixed position */}
       <button
         onClick={() => setIsChatOpen(true)}
-        className="fixed left-5 bottom-5 w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center z-40 transition-all duration-300 hover:scale-110"
         aria-label="Open chat support"
+        className="fixed left-6 bottom-6 w-16 h-16 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center z-50 transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-blue-300"
       >
         💬
       </button>
 
       {/* Chat Popup Component */}
-      <ChatPopup 
-        isOpen={isChatOpen} 
-        onClose={() => setIsChatOpen(false)} 
-      />
+      <ChatPopup isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </div>
   );
 };
