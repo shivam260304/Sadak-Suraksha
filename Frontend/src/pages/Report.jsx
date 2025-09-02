@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useAuth } from "../components/AuthContext";
 
 const Report = () => {
   const [title, setTitle] = useState("");
@@ -9,11 +10,19 @@ const Report = () => {
   const [category, setCategory] = useState("");
   const [priority, setPriority] = useState("");
   const [message, setMessage] = useState("");
+  const { isAuthenticated } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!isAuthenticated) {
+      setMessage("You must be logged in to submit a report.");
+      return;
+    }
+
     try {
+      const token = localStorage.getItem("token");
+
       const reportData = {
         title,
         description,
@@ -23,24 +32,17 @@ const Report = () => {
         imageUrl: image ? image.name : "",
       };
 
-      // Get token from localStorage (make sure your login process stores it here)
-      const token = localStorage.getItem("token"); // Adjust storage if you use cookies/session
-
-      if (!token) {
-        setMessage("You must be logged in to submit a report.");
-        return;
-      }
-
       const res = await axios.post(
         "http://localhost:5000/api/report",
         reportData,
         {
           headers: {
-            "Authorization": `Bearer ${token}`,
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
-      setMessage(res.data.message);
+
+      setMessage(res.data.message || "Report submitted successfully.");
 
       // Reset form
       setTitle("");
@@ -50,7 +52,7 @@ const Report = () => {
       setCategory("");
       setPriority("");
     } catch (error) {
-      setMessage(error.response?.data?.message || "Failed to submit report");
+      setMessage(error.response?.data?.message || "Failed to submit report.");
     }
   };
 
@@ -59,14 +61,23 @@ const Report = () => {
       <div className="bg-white p-8 rounded shadow-md w-full max-w-xl">
         <h2 className="text-2xl font-bold mb-6 text-blue-700 text-center">Report Road Issue</h2>
         {message && (
-          <div className={`mb-4 text-center text-sm ${message.includes("success") || message.includes("submitted") ? "text-green-600" : "text-red-600"}`}>
+          <div
+            className={`mb-4 text-center text-sm ${
+            /success|submitted/i.test(message)
+            ? "text-green-600"
+            : "text-red-600"
+        }`}
+
+          >
             {message}
           </div>
         )}
         <form onSubmit={handleSubmit}>
           <label className="block mb-2 font-medium">Title</label>
           <input
-            type="text" required value={title}
+            type="text"
+            required
+            value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="w-full border px-3 py-2 rounded mb-4"
             placeholder="e.g. Big pothole near junction"
@@ -74,15 +85,18 @@ const Report = () => {
 
           <label className="block mb-2 font-medium">Description</label>
           <textarea
-            required value={description}
+            required
+            value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="w-full border px-3 py-2 rounded mb-4"
             placeholder="Describe the issue in detail..."
-          ></textarea>
+          />
 
           <label className="block mb-2 font-medium">Location</label>
           <input
-            type="text" required value={location}
+            type="text"
+            required
+            value={location}
             onChange={(e) => setLocation(e.target.value)}
             className="w-full border px-3 py-2 rounded mb-4"
             placeholder="e.g. Near City Mall, MG Road"
@@ -90,7 +104,8 @@ const Report = () => {
 
           <label className="block mb-2 font-medium">Category</label>
           <select
-            required value={category}
+            required
+            value={category}
             onChange={(e) => setCategory(e.target.value)}
             className="w-full border px-3 py-2 rounded mb-4 bg-white"
           >
@@ -105,7 +120,8 @@ const Report = () => {
 
           <label className="block mb-2 font-medium">Priority</label>
           <select
-            required value={priority}
+            required
+            value={priority}
             onChange={(e) => setPriority(e.target.value)}
             className="w-full border px-3 py-2 rounded mb-4 bg-white"
           >
@@ -114,7 +130,7 @@ const Report = () => {
             <option value="Medium">🟠 Medium – Disruptive but manageable</option>
             <option value="Low">🟢 Low – Minor inconvenience</option>
           </select>
-              
+
           <label className="block mb-2 font-medium">Photo (optional)</label>
           <div className="mb-4">
             <input
@@ -136,6 +152,7 @@ const Report = () => {
               </p>
             )}
           </div>
+
           <button
             type="submit"
             className="w-full bg-blue-700 text-white py-2 rounded hover:bg-blue-800"

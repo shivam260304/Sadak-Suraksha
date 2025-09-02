@@ -3,8 +3,7 @@ const router = express.Router();
 const Report = require('../models/Report');
 const jwt = require('jsonwebtoken');
 
-// Add authentication middleware here.
-// (Copy-paste this to the top of your file if not imported)
+// Authentication middleware to verify JWT and set req.userId
 function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ message: "No token provided" });
@@ -19,7 +18,7 @@ function authMiddleware(req, res, next) {
   }
 }
 
-// POST /api/report
+// POST /api/report - create a new report linked to logged-in user
 router.post('/', authMiddleware, async (req, res) => {
   try {
     const { title, description, location, category, priority, imageUrl } = req.body;
@@ -31,7 +30,7 @@ router.post('/', authMiddleware, async (req, res) => {
       category,
       priority,
       imageUrl: imageUrl || "",
-      user: req.userId // <-- Save the ID of the logged-in user!
+      user: req.userId, // Save creator's user ID
     });
 
     await report.save();

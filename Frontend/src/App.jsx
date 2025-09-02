@@ -6,12 +6,8 @@ import Register from "./pages/Register";
 import Report from "./pages/Report";
 import MyReports from "./pages/MyReports";
 import { AuthProvider } from "./components/AuthContext";
+import AdminHome from "./pages/AdminHome";
 
-const AdminHome = () => (
-  <div className="min-h-screen flex flex-col items-center justify-center p-6">
-    <h1 className="text-3xl font-bold mb-4">Admin Home Page (Coming Soon)</h1>
-  </div>
-);
 const Complaints = () => (
   <div className="min-h-screen flex flex-col items-center justify-center p-6">
     <h1 className="text-3xl font-bold mb-4">Complaints Page (Coming Soon)</h1>

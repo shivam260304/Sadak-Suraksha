@@ -43,10 +43,18 @@ const Navbar = () => {
   return (
     <nav className="bg-blue-800 text-white px-6 py-3 shadow-md">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <Link to="/" className="text-xl font-bold">🚧 Sadak Suraksha</Link>
+        {userRole === "admin" ? (
+          <span className="text-xl font-bold cursor-default select-none">
+            🚧 Sadak Suraksha
+          </span>
+        ) : (
+          <Link to="/" className="text-xl font-bold">
+            🚧 Sadak Suraksha
+          </Link>
+        )}
 
         <div className="md:hidden">
-          <button onClick={() => setIsOpen(!isOpen)}>
+          <button onClick={() => setIsOpen(!isOpen)} aria-label="Toggle navigation menu">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {isOpen ? (
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -61,11 +69,17 @@ const Navbar = () => {
           {isAuthenticated ? (userRole === "admin" ? adminLinks : commonUserLinks) : null}
           {!isAuthenticated ? (
             <>
-              <Link to="/login" onClick={() => setIsOpen(false)} className="inline-block px-2 py-1 hover:text-orange-300">Login</Link>
-              <Link to="/register" onClick={() => setIsOpen(false)} className="inline-block px-2 py-1 hover:text-orange-300">Register</Link>
+              <Link to="/login" onClick={() => setIsOpen(false)} className="inline-block px-2 py-1 hover:text-orange-300">
+                Login
+              </Link>
+              <Link to="/register" onClick={() => setIsOpen(false)} className="inline-block px-2 py-1 hover:text-orange-300">
+                Register
+              </Link>
             </>
           ) : (
-            <button onClick={handleLogout} className="inline-block px-2 py-1 hover:text-orange-300">Logout</button>
+            <button onClick={handleLogout} className="inline-block px-2 py-1 hover:text-orange-300">
+              Logout
+            </button>
           )}
         </div>
       </div>
@@ -75,11 +89,17 @@ const Navbar = () => {
           {isAuthenticated ? (userRole === "admin" ? adminLinks : commonUserLinks) : null}
           {!isAuthenticated ? (
             <>
-              <Link to="/login" onClick={() => setIsOpen(false)} className="inline-block px-2 py-1 hover:text-orange-300">Login</Link>
-              <Link to="/register" onClick={() => setIsOpen(false)} className="inline-block px-2 py-1 hover:text-orange-300">Register</Link>
+              <Link to="/login" onClick={() => setIsOpen(false)} className="inline-block px-2 py-1 hover:text-orange-300">
+                Login
+              </Link>
+              <Link to="/register" onClick={() => setIsOpen(false)} className="inline-block px-2 py-1 hover:text-orange-300">
+                Register
+              </Link>
             </>
           ) : (
-            <button onClick={handleLogout} className="inline-block px-2 py-1 hover:text-orange-300">Logout</button>
+            <button onClick={handleLogout} className="inline-block px-2 py-1 hover:text-orange-300">
+              Logout
+            </button>
           )}
         </div>
       )}

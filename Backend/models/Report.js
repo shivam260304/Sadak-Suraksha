@@ -7,7 +7,14 @@ const reportSchema = new mongoose.Schema(
     location: { type: String, required: true },
     category: { type: String, required: true },
     priority: { type: String, required: true },
-    imageUrl: { type: String }, // We'll store just the file name or a URL for images
+    imageUrl: { type: String }, // Filename or URL for report image
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    status: {
+      type: String,
+      enum: ["Submitted", "Under Review", "In Progress", "Resolved"],
+      default: "Submitted",
+      required: true,
+    },
     createdAt: { type: Date, default: Date.now },
   },
   { timestamps: true }
