@@ -6,6 +6,7 @@ const authRoutes = require('./routes/auth');
 const reportRoutes = require('./routes/report');
 const myReportRoutes = require('./routes/myreport');
 const chatbotRoutes = require('./routes/chatbotRoutes');
+const complaintsRoutes = require('./routes/complaints');
 const path = require('path');
 const fs = require('fs');
 dotenv.config();
@@ -27,6 +28,7 @@ app.use('/api/report', reportRoutes);
 app.use('/api/myReport', myReportRoutes);
 app.use('/api/chatbot', chatbotRoutes);
 app.use('/uploads', express.static(uploadsDir));
+app.use('/api/complaints', complaintsRoutes);
 
 app.get("/", (req, res) => {
   res.send("Sadak Surakhsha Backend is running!");
