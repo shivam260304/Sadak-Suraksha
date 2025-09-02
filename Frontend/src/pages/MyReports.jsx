@@ -114,7 +114,7 @@ const MyReports = () => {
                   <div className="mt-2">
                     <p className="text-sm text-gray-600">📷 Photo:</p>
                     <img
-                      src={report.imageUrl}
+                      src={`http://localhost:5000${report.imageUrl}`}
                       alt="Uploaded"
                       className="mt-1 max-w-xs border rounded"
                     />

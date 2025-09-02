@@ -2,8 +2,20 @@ const express = require('express');
 const router = express.Router();
 const Report = require('../models/Report');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const path = require('path');
 
-// Authentication middleware to verify JWT and set req.userId
+// Multer setup
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, 'uploads/'),
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  }
+});
+const upload = multer({ storage });
+
+// Auth middleware
 function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ message: "No token provided" });
@@ -18,10 +30,12 @@ function authMiddleware(req, res, next) {
   }
 }
 
-// POST /api/report - create a new report linked to logged-in user
-router.post('/', authMiddleware, async (req, res) => {
+// POST /api/report with image upload (field name: 'image')
+router.post('/', authMiddleware, upload.single('image'), async (req, res) => {
   try {
-    const { title, description, location, category, priority, imageUrl } = req.body;
+    const { title, description, location, category, priority } = req.body;
+
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : "";
 
     const report = new Report({
       title,
@@ -29,8 +43,8 @@ router.post('/', authMiddleware, async (req, res) => {
       location,
       category,
       priority,
-      imageUrl: imageUrl || "",
-      user: req.userId, // Save creator's user ID
+      imageUrl,
+      user: req.userId,
     });
 
     await report.save();

@@ -22,25 +22,20 @@ const Report = () => {
 
     try {
       const token = localStorage.getItem("token");
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("location", location);
+      formData.append("category", category);
+      formData.append("priority", priority);
+      if (image) formData.append("image", image);
 
-      const reportData = {
-        title,
-        description,
-        location,
-        category,
-        priority,
-        imageUrl: image ? image.name : "",
-      };
-
-      const res = await axios.post(
-        "http://localhost:5000/api/report",
-        reportData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.post("http://localhost:5000/api/report", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       setMessage(res.data.message || "Report submitted successfully.");
 
@@ -63,16 +58,14 @@ const Report = () => {
         {message && (
           <div
             className={`mb-4 text-center text-sm ${
-            /success|submitted/i.test(message)
-            ? "text-green-600"
-            : "text-red-600"
-        }`}
-
+              /success|submitted/i.test(message) ? "text-green-600" : "text-red-600"
+            }`}
           >
             {message}
           </div>
         )}
         <form onSubmit={handleSubmit}>
+          {/* Input fields as before */}
           <label className="block mb-2 font-medium">Title</label>
           <input
             type="text"
