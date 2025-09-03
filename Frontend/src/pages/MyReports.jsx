@@ -7,7 +7,7 @@ const statusColors = {
   "Under Review": "bg-yellow-400",
   "In Progress": "bg-blue-500",
   Resolved: "bg-green-600",
-  Rejected: "bg-red-600",  // Added red color for Rejected
+  Rejected: "bg-red-600",
 };
 
 const getProgressData = (status) => {
@@ -21,7 +21,7 @@ const getProgressData = (status) => {
     case "Resolved":
       return { percent: 100, color: statusColors["Resolved"] };
     case "Rejected":
-      return { percent: 100, color: statusColors["Rejected"] };  // Full red bar for Rejected
+      return { percent: 100, color: statusColors["Rejected"] };
     default:
       return { percent: 0, color: "bg-gray-300" };
   }
@@ -42,9 +42,7 @@ const MyReports = () => {
       setLoading(false);
       return;
     }
-
     if (isAuthenticated === null || isAuthenticated === undefined) {
-      // Authentication status unknown yet
       return;
     }
 
@@ -111,14 +109,15 @@ const MyReports = () => {
                 <div
                   key={report._id || index}
                   className="relative bg-white shadow p-4 rounded border-l-4 border-blue-600 flex"
-                  style={{ paddingRight: "3rem" }} // create space for progress bar on right
+                  style={{ paddingRight: "3rem" }}
                 >
                   <div className="flex-1">
                     <div className="flex justify-between items-center mb-2">
                       <h3 className="text-lg font-semibold text-blue-700">{report.title}</h3>
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          statusColors[report.status]?.replace("bg-", "text-") || "text-gray-600 bg-gray-200"
+                          statusColors[report.status]?.replace("bg-", "text-") || 
+                          "text-gray-600 bg-gray-200"
                         }`}
                       >
                         {report.status}
@@ -130,14 +129,45 @@ const MyReports = () => {
                       📍 {report.location} | 🕒{" "}
                       {report.createdAt ? new Date(report.createdAt).toLocaleString() : ""}
                     </p>
-                    {report.imageUrl && (
-                      <div className="mt-2 flex items-center space-x-4 max-w-xs">
-                        <img
-                          src={`http://localhost:5000${report.imageUrl}`}
-                          alt="Uploaded"
-                          className="border rounded max-w-full"
-                        />
+
+                    {/* Before and After Images side by side */}
+                    <div className="flex space-x-6 mt-3 max-w-xs">
+                      <div className="flex flex-col items-center">
+                        <span className="mb-1 font-semibold text-gray-700">Before Image</span>
+                        {report.imageUrl ? (
+                          <img
+                            src={`http://localhost:5000${report.imageUrl}`}
+                            alt="User uploaded"
+                            className="max-w-xs rounded border"
+                          />
+                        ) : (
+                          <span className="italic text-gray-400">No user image available</span>
+                        )}
                       </div>
+
+                      {/* Show AFTER image only if present */}
+                      {report.adminImageUrl && report.adminImageUrl.trim() !== "" && (
+                        <div className="flex flex-col items-center">
+                          <span className="mb-1 font-semibold text-gray-700">After Image</span>
+                          <img
+                            src={
+                              report.adminImageUrl.startsWith("http")
+                                ? report.adminImageUrl
+                                : `http://localhost:5000${report.adminImageUrl}`
+                            }
+                            alt="Admin uploaded"
+                            className="max-w-xs rounded border"
+                          />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Show Admin Remarks only if present and non-empty */}
+                    {report.adminRemarks && report.adminRemarks.trim() !== "" && (
+                      <p className="mt-4 text-gray-700">
+                        <span className="font-semibold">Admin Remarks: </span>
+                        {report.adminRemarks}
+                      </p>
                     )}
                   </div>
 

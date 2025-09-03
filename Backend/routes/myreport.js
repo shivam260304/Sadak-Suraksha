@@ -1,8 +1,9 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Report = require('../models/Report');
-const jwt = require('jsonwebtoken');
+const Report = require("../models/Report");
+const jwt = require("jsonwebtoken");
 
+// Middleware to authenticate user
 function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ message: "No token provided" });
@@ -17,9 +18,14 @@ function authMiddleware(req, res, next) {
   }
 }
 
-router.get('/', authMiddleware, async (req, res) => {
+router.get("/", authMiddleware, async (req, res) => {
   try {
-    const myReports = await Report.find({ user: req.userId }).sort({ createdAt: -1 });
+    const myReports = await Report.find({ user: req.userId })
+      .sort({ createdAt: -1 })
+      .lean()
+      .select(
+        "title description location priority status createdAt imageUrl adminImageUrl adminRemarks"
+      );
     res.json({ reports: myReports });
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch your reports." });

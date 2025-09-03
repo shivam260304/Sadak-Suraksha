@@ -2,6 +2,18 @@ const express = require('express');
 const router = express.Router();
 const Report = require('../models/Report');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const path = require('path');
+
+// Multer setup
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, 'uploads/'),
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  }
+});
+const upload = multer({ storage });
 
 // Admin auth middleware, verifying token and admin role
 function adminAuthMiddleware(req, res, next) {
@@ -33,7 +45,10 @@ router.get('/', adminAuthMiddleware, async (req, res) => {
       Low: 3,
     };
 
-    const reports = await Report.find().lean();
+    // Find reports and populate user with username
+    const reports = await Report.find()
+      .populate({ path: 'user', select: 'username' })
+      .lean();
 
     // Sort reports by priority using mapping
     reports.sort((a, b) => (priorityOrder[a.priority] || 99) - (priorityOrder[b.priority] || 99));
@@ -44,6 +59,7 @@ router.get('/', adminAuthMiddleware, async (req, res) => {
     res.status(500).json({ message: "Failed to fetch complaints." });
   }
 });
+
 
 // PATCH /api/complaints/:id/status
 // Update status of a specific report
@@ -90,5 +106,36 @@ router.patch('/:id/reject', adminAuthMiddleware, async (req, res) => {
   }
 });
 
+router.post('/:id/admin-image', adminAuthMiddleware, upload.single('adminImage'), async (req, res) => {
+  try {
+    const report = await Report.findById(req.params.id);
+    if (!report) return res.status(404).send({ message: "Report not found" });
+
+    // Assume 'adminImage' is stored and path assigned here
+    report.adminImageUrl = "/uploads/" + req.file.filename; 
+    await report.save();
+
+    res.json({ message: "Admin image uploaded", report });
+  } catch (err) {
+    res.status(500).send({ message: "Upload failed" });
+  }
+});
+
+router.patch("/:id/admin-remarks", adminAuthMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { remarks } = req.body;
+
+    const report = await Report.findById(id);
+    if (!report) return res.status(404).json({ message: "Report not found" });
+
+    report.adminRemarks = remarks || "";
+    await report.save();
+
+    res.json({ message: "Admin remarks updated.", adminRemarks: report.adminRemarks });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to update admin remarks." });
+  }
+});
 
 module.exports = router;
