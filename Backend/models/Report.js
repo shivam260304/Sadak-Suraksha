@@ -7,11 +7,11 @@ const reportSchema = new mongoose.Schema(
     location: { type: String, required: true },
     category: { type: String, required: true },
     priority: { type: String, required: true },
-    imageUrl: { type: String }, // Filename or URL for report image
+    imageUrl: { type: String },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     status: {
       type: String,
-      enum: ["Submitted", "Under Review", "In Progress", "Resolved"],
+      enum: ["Submitted", "Under Review", "In Progress", "Resolved", "Rejected"],
       default: "Submitted",
       required: true,
     },

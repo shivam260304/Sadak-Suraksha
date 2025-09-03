@@ -56,4 +56,16 @@ router.post('/', authMiddleware, upload.single('image'), async (req, res) => {
   }
 });
 
+router.get('/status-counts', authMiddleware, async (req, res) => {
+  try {
+    const resolvedCount = await Report.countDocuments({ status: "Resolved" });
+    const rejectedCount = await Report.countDocuments({ status: "Rejected" });
+
+    res.json({ Resolved: resolvedCount, Rejected: rejectedCount });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to get status counts." });
+  }
+});
+
 module.exports = router;

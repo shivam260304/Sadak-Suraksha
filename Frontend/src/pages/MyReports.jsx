@@ -3,22 +3,25 @@ import axios from "axios";
 import { useAuth } from "../components/AuthContext";
 
 const statusColors = {
-  Submitted: "text-gray-600 bg-gray-200",
-  "Under Review": "text-yellow-700 bg-yellow-100",
-  "In Progress": "text-blue-700 bg-blue-100",
-  Resolved: "text-green-700 bg-green-100",
+  Submitted: "bg-gray-500",
+  "Under Review": "bg-yellow-400",
+  "In Progress": "bg-blue-500",
+  Resolved: "bg-green-600",
+  Rejected: "bg-red-600",  // Added red color for Rejected
 };
 
 const getProgressData = (status) => {
   switch (status) {
     case "Submitted":
-      return { percent: 25, color: "bg-gray-500" };
+      return { percent: 25, color: statusColors["Submitted"] };
     case "Under Review":
-      return { percent: 50, color: "bg-yellow-400" };
+      return { percent: 50, color: statusColors["Under Review"] };
     case "In Progress":
-      return { percent: 75, color: "bg-blue-500" };
+      return { percent: 75, color: statusColors["In Progress"] };
     case "Resolved":
-      return { percent: 100, color: "bg-green-600" };
+      return { percent: 100, color: statusColors["Resolved"] };
+    case "Rejected":
+      return { percent: 100, color: statusColors["Rejected"] };  // Full red bar for Rejected
     default:
       return { percent: 0, color: "bg-gray-300" };
   }
@@ -107,44 +110,68 @@ const MyReports = () => {
               return (
                 <div
                   key={report._id || index}
-                  className="bg-white shadow p-4 rounded border-l-4 border-blue-600 relative"
+                  className="relative bg-white shadow p-4 rounded border-l-4 border-blue-600 flex"
+                  style={{ paddingRight: "3rem" }} // create space for progress bar on right
                 >
-                  <div className="flex justify-between items-center mb-2">
-                    <h3 className="text-lg font-semibold text-blue-700">{report.title}</h3>
+                  <div className="flex-1">
+                    <div className="flex justify-between items-center mb-2">
+                      <h3 className="text-lg font-semibold text-blue-700">{report.title}</h3>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                          statusColors[report.status]?.replace("bg-", "text-") || "text-gray-600 bg-gray-200"
+                        }`}
+                      >
+                        {report.status}
+                      </span>
+                    </div>
 
-                    {/* Status badge */}
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        statusColors[report.status] || "text-gray-600 bg-gray-200"
-                      }`}
-                    >
-                      {report.status}
-                    </span>
+                    <p className="text-gray-700 mb-1">{report.description}</p>
+                    <p className="text-sm text-gray-500">
+                      📍 {report.location} | 🕒{" "}
+                      {report.createdAt ? new Date(report.createdAt).toLocaleString() : ""}
+                    </p>
+                    {report.imageUrl && (
+                      <div className="mt-2 flex items-center space-x-4 max-w-xs">
+                        <img
+                          src={`http://localhost:5000${report.imageUrl}`}
+                          alt="Uploaded"
+                          className="border rounded max-w-full"
+                        />
+                      </div>
+                    )}
                   </div>
 
-                  {/* Progress Bar */}
-                  <div className="w-full h-2 mb-4 bg-gray-200 rounded">
+                  {/* Vertical progress bar */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      height: "100%",
+                      width: "8px",
+                      overflow: "hidden",
+                      borderTopRightRadius: "0.5rem",
+                      borderBottomRightRadius: "0.5rem",
+                      backgroundColor: "#e5e7eb",
+                    }}
+                    aria-label={`Progress: ${percent}%`}
+                    title={`Progress: ${percent}%`}
+                  >
                     <div
-                      className={`${color} h-2 rounded`}
-                      style={{ width: `${percent}%` }}
+                      style={{
+                        backgroundColor: color.replace("bg-", ""),
+                        height: `${percent}%`,
+                        width: "100%",
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        borderTopRightRadius: "0.5rem",
+                        borderBottomRightRadius: "0.5rem",
+                        transition: "height 0.3s ease",
+                      }}
+                      className={`${color}`}
                     ></div>
                   </div>
-
-                  <p className="text-gray-700 mb-1">{report.description}</p>
-                  <p className="text-sm text-gray-500">
-                    📍 {report.location} | 🕒{" "}
-                    {report.createdAt ? new Date(report.createdAt).toLocaleString() : ""}
-                  </p>
-                  {report.imageUrl && (
-                    <div className="mt-2">
-                      <p className="text-sm text-gray-600">📷 Photo:</p>
-                      <img
-                        src={`http://localhost:5000${report.imageUrl}`}
-                        alt="Uploaded"
-                        className="mt-1 max-w-xs border rounded"
-                      />
-                    </div>
-                  )}
                 </div>
               );
             })}
