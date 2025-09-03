@@ -78,7 +78,7 @@ const Register = () => {
           <input
             type="text"
             required
-            placeholder="Full Name"
+            placeholder="User Name"
             className="w-full px-3 py-2 mb-4 border rounded"
             value={username}
             onChange={(e) => setUsername(e.target.value)}

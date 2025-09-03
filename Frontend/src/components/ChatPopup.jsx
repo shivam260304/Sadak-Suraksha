@@ -110,7 +110,7 @@ const ChatPopup = ({ isOpen = true, onClose }) => {
       {/* Header */}
       <div className="flex justify-between items-center p-4 bg-[#232347] border-b border-gray-800">
         <div className="flex items-center gap-2">
-          <span className="font-bold text-lg text-slate-200">Urban Cab</span>
+          <span className="font-bold text-lg text-slate-200">Assistant</span>
           <span className="text-xs px-2 py-1 rounded bg-purple-700 text-white">using proxy</span>
         </div>
         {onClose && (

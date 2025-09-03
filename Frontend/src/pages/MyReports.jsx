@@ -9,6 +9,21 @@ const statusColors = {
   Resolved: "text-green-700 bg-green-100",
 };
 
+const getProgressData = (status) => {
+  switch (status) {
+    case "Submitted":
+      return { percent: 25, color: "bg-gray-500" };
+    case "Under Review":
+      return { percent: 50, color: "bg-yellow-400" };
+    case "In Progress":
+      return { percent: 75, color: "bg-blue-500" };
+    case "Resolved":
+      return { percent: 100, color: "bg-green-600" };
+    default:
+      return { percent: 0, color: "bg-gray-300" };
+  }
+};
+
 const MyReports = () => {
   const [reports, setReports] = useState([]);
   const [filtered, setFiltered] = useState([]);
@@ -37,9 +52,9 @@ const MyReports = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        const reports = Array.isArray(res.data.reports) ? res.data.reports : res.data;
-        setReports(reports);
-        setFiltered(reports);
+        const reportsData = Array.isArray(res.data.reports) ? res.data.reports : res.data;
+        setReports(reportsData);
+        setFiltered(reportsData);
         setError("");
       } catch (err) {
         setError(err.response?.data?.message || "Could not fetch your reports");
@@ -87,41 +102,52 @@ const MyReports = () => {
           <p className="text-center text-gray-600">No reports found.</p>
         ) : (
           <div className="space-y-6">
-            {filtered.map((report, index) => (
-              <div
-                key={report._id || index}
-                className="bg-white shadow p-4 rounded border-l-4 border-blue-600 relative"
-              >
-                <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-lg font-semibold text-blue-700">{report.title}</h3>
+            {filtered.map((report, index) => {
+              const { percent, color } = getProgressData(report.status);
+              return (
+                <div
+                  key={report._id || index}
+                  className="bg-white shadow p-4 rounded border-l-4 border-blue-600 relative"
+                >
+                  <div className="flex justify-between items-center mb-2">
+                    <h3 className="text-lg font-semibold text-blue-700">{report.title}</h3>
 
-                  {/* Status badge */}
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      statusColors[report.status] || "text-gray-600 bg-gray-200"
-                    }`}
-                  >
-                    {report.status}
-                  </span>
-                </div>
-
-                <p className="text-gray-700 mb-1">{report.description}</p>
-                <p className="text-sm text-gray-500">
-                  📍 {report.location} | 🕒{" "}
-                  {report.createdAt ? new Date(report.createdAt).toLocaleString() : ""}
-                </p>
-                {report.imageUrl && (
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-600">📷 Photo:</p>
-                    <img
-                      src={`http://localhost:5000${report.imageUrl}`}
-                      alt="Uploaded"
-                      className="mt-1 max-w-xs border rounded"
-                    />
+                    {/* Status badge */}
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        statusColors[report.status] || "text-gray-600 bg-gray-200"
+                      }`}
+                    >
+                      {report.status}
+                    </span>
                   </div>
-                )}
-              </div>
-            ))}
+
+                  {/* Progress Bar */}
+                  <div className="w-full h-2 mb-4 bg-gray-200 rounded">
+                    <div
+                      className={`${color} h-2 rounded`}
+                      style={{ width: `${percent}%` }}
+                    ></div>
+                  </div>
+
+                  <p className="text-gray-700 mb-1">{report.description}</p>
+                  <p className="text-sm text-gray-500">
+                    📍 {report.location} | 🕒{" "}
+                    {report.createdAt ? new Date(report.createdAt).toLocaleString() : ""}
+                  </p>
+                  {report.imageUrl && (
+                    <div className="mt-2">
+                      <p className="text-sm text-gray-600">📷 Photo:</p>
+                      <img
+                        src={`http://localhost:5000${report.imageUrl}`}
+                        alt="Uploaded"
+                        className="mt-1 max-w-xs border rounded"
+                      />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
       </div>

@@ -15,11 +15,18 @@ const Home = () => {
         <p className="mt-6 text-lg sm:text-xl text-gray-700 max-w-3xl mx-auto">
           A crowdsourced platform for citizens to report potholes and road hazards in real-time.
         </p>
-        <Link to="/report" aria-label="Report a hazard">
-          <button className="mt-8 px-8 py-3 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white rounded-lg shadow-lg transition transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-orange-300">
-            Report a Hazard
-          </button>
-        </Link>
+        <div className="flex justify-center gap-6 mt-8">
+          <Link to="/report" aria-label="Report a hazard">
+            <button className="px-8 py-3 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white rounded-lg shadow-lg transition transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-orange-300">
+              Report a Hazard
+            </button>
+          </Link>
+          <Link to="/city-overview" aria-label="City overview">
+            <button className="px-8 py-3 bg-green-600 hover:bg-green-700 active:bg-green-800 text-white rounded-lg shadow-lg transition transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-300">
+              City Overview
+            </button>
+          </Link>
+        </div>
       </section>
 
       {/* Features Section */}

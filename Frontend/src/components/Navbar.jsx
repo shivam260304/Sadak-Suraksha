@@ -29,13 +29,13 @@ const Navbar = () => {
   const adminLinks = (
     <>
       <Link to="/admin-home" onClick={() => setIsOpen(false)} className="inline-block px-2 py-1 hover:text-orange-300">
-        Admin Home Page
+        Home
       </Link>
       <Link to="/complaints" onClick={() => setIsOpen(false)} className="inline-block px-2 py-1 hover:text-orange-300">
         Complaints
       </Link>
       <Link to="/solves-complaints" onClick={() => setIsOpen(false)} className="inline-block px-2 py-1 hover:text-orange-300">
-        Solves Complaints
+        Solved Complaints
       </Link>
     </>
   );

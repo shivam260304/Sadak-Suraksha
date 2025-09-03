@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
+import Home from "./pages/home";
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -9,6 +9,7 @@ import { AuthProvider } from "./components/AuthContext";
 import AdminHome from "./pages/AdminHome";
 import Complaints from "./pages/Complaints";
 import SolvesComplaints from "./pages/SolvesComplaints";
+import CityOverview from "./pages/CityOverview";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
 
           <Route path="/report" element={<Report />} />
           <Route path="/my-reports" element={<MyReports />} />
+          <Route path="/city-overview" element={<CityOverview />} />
 
           {/* Admin routes */}
           <Route path="/admin-home" element={<AdminHome />} />
