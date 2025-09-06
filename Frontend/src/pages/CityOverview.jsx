@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import UserFooter from "../components/UserFooter";
 
 const CityOverview = () => {
   const [reports, setReports] = useState([]);
@@ -112,6 +113,7 @@ const CityOverview = () => {
           ))}
         </div>
       )}
+      <UserFooter />
     </div>
   );
 };

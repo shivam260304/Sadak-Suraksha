@@ -187,7 +187,7 @@ const ChatPopup = ({ isOpen = true, onClose }) => {
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Type your message... (Enter to send, Shift+Enter for new line)" // Fixed: correct placeholder text
+          placeholder="Type your message..." // Fixed: correct placeholder text
           disabled={loading}
         />
         <button

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../components/AuthContext";
+import Footer from "../components/Footer";
 
 const SolvesComplaints = () => {
   const [reports, setReports] = useState([]);
@@ -176,6 +177,7 @@ const SolvesComplaints = () => {
         ))}
       </div>
     )}
+    <Footer />
   </div>
 );
 

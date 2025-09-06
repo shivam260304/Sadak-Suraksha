@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../components/AuthContext";
+import Footer from "../components/Footer";
 
 const statusOptions = [
   "Submitted",
@@ -303,6 +304,7 @@ const Complaints = () => {
             ))}
         </div>
       )}
+      <Footer />
     </div>
   );
 };

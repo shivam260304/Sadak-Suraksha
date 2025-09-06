@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import ChatPopup from "../components/ChatPopup";
+import UserFooter from "../components/UserFooter";
 
 const Home = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -62,6 +63,7 @@ const Home = () => {
 
       {/* Chat Popup Component */}
       <ChatPopup isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+      <UserFooter />
     </div>
   );
 };

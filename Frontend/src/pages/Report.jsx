@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useAuth } from "../components/AuthContext";
+import UserFooter from "../components/UserFooter";
 
 const Report = () => {
   const [title, setTitle] = useState("");
@@ -52,7 +53,8 @@ const Report = () => {
   };
 
   return (
-    <div className="pt-20 px-4 flex justify-center">
+    <div>
+      <div className="pt-20 px-4 flex justify-center">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-xl">
         <h2 className="text-2xl font-bold mb-6 text-blue-700 text-center">Report Road Issue</h2>
         {message && (
@@ -154,6 +156,8 @@ const Report = () => {
           </button>
         </form>
       </div>
+    </div>
+      <UserFooter />
     </div>
   );
 };

@@ -10,6 +10,7 @@ import AdminHome from "./pages/AdminHome";
 import Complaints from "./pages/Complaints";
 import SolvesComplaints from "./pages/SolvesComplaints";
 import CityOverview from "./pages/CityOverview";
+import About from "./pages/About";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/report" element={<Report />} />
           <Route path="/my-reports" element={<MyReports />} />
           <Route path="/city-overview" element={<CityOverview />} />
+          <Route path="/aboutus" element={<About />} />
 
           {/* Admin routes */}
           <Route path="/admin-home" element={<AdminHome />} />

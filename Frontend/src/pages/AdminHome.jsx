@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../components/AuthContext";
+import Footer from "../components/Footer";
 
 const AdminHome = () => {
   const [counts, setCounts] = useState({ Resolved: 0, Rejected: 0 });
@@ -76,9 +77,7 @@ const AdminHome = () => {
       </section>
 
       {/* Footer */}
-      <footer className="mt-20 text-center text-sm text-gray-500 select-none">
-        🇮🇳 Made with care for Indian roads by Team Sadak Suraksha
-      </footer>
+      <Footer />
     </div>
   );
 };
